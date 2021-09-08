@@ -1,6 +1,6 @@
 {
   "version": "0.2.1",
-  "timestamp": 1631088877252,
+  "timestamp": 1631092255331,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -196,13 +196,13 @@
               "transitionEnabled": false,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
-              "focusedPattern": 1,
+              "focusedPattern": 4,
               "triggerPatternCycle": false
             },
             "children": {},
             "effects": [],
             "clips": [],
-            "patternIndex": 1,
+            "patternIndex": 4,
             "patterns": [
               {
                 "id": 31,
@@ -331,6 +331,62 @@
                 "children": {
                   "modulation": {
                     "id": 71,
+                    "class": "heronarts.lx.modulation.LXModulationEngine",
+                    "internal": {
+                      "modulationColor": 0
+                    },
+                    "parameters": {
+                      "label": "Modulation"
+                    },
+                    "children": {},
+                    "modulators": [],
+                    "modulations": [],
+                    "triggers": []
+                  }
+                },
+                "deviceVersion": -1
+              },
+              {
+                "id": 92,
+                "class": "heronarts.lx.pattern.texture.NoisePattern",
+                "internal": {
+                  "modulationColor": 0,
+                  "expanded": true,
+                  "modulationExpanded": false,
+                  "autoCycleEligible": true
+                },
+                "parameters": {
+                  "label": "Noise",
+                  "midpoint": 65.00000078231096,
+                  "contrast": 91.25572828098018,
+                  "xOffset": 0.0,
+                  "yOffset": 0.0,
+                  "zOffset": 0.0,
+                  "scale": 1.0,
+                  "minScale": 1.0,
+                  "maxScale": 10.0,
+                  "xScale": 1.0,
+                  "yScale": 1.0,
+                  "zScale": 1.0,
+                  "motion": true,
+                  "motionSpeed": 0.7924528419971466,
+                  "motionSpeedRange": 128.0,
+                  "xMotion": 0.0,
+                  "yMotion": 0.0,
+                  "zMotion": 1.0,
+                  "algorithm": 0,
+                  "seed": 0,
+                  "octaves": 3,
+                  "lacunarity": 2.0,
+                  "gain": 0.5,
+                  "ridgeOffset": 0.9,
+                  "xMode": 0,
+                  "yMode": 0,
+                  "zMode": 0
+                },
+                "children": {
+                  "modulation": {
+                    "id": 93,
                     "class": "heronarts.lx.modulation.LXModulationEngine",
                     "internal": {
                       "modulationColor": 0
@@ -531,32 +587,32 @@
         "phiLock": true,
         "centerPoint": false,
         "camera": {
-          "active": false,
-          "radius": 1002.3006879763667,
-          "theta": 0.36116843298077583,
-          "phi": -0.09803145937621593,
-          "x": 24.149999618530273,
-          "y": 474.3500061035156,
-          "z": 0.0
+          "active": true,
+          "radius": 8.96323434927896,
+          "theta": 0.024569230154156685,
+          "phi": -0.3691808544099331,
+          "x": 38.088763734005624,
+          "y": 460.0961913559586,
+          "z": 5.859299936331809
         },
         "cue": [
           {
-            "active": false,
-            "radius": 1002.3006879763667,
-            "theta": 0.36116843298077583,
-            "phi": -0.09803145937621593,
+            "active": true,
+            "radius": 988.7798049203577,
+            "theta": 0.033919211477041245,
+            "phi": -0.42528073489665985,
             "x": 24.149999618530273,
             "y": 474.3500061035156,
             "z": 0.0
           },
           {
-            "active": false,
-            "radius": 120.0,
-            "theta": 0.0,
-            "phi": 0.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
+            "active": true,
+            "radius": 8.96323434927896,
+            "theta": 0.024569230154156685,
+            "phi": -0.3691808544099331,
+            "x": 38.088763734005624,
+            "y": 460.0961913559586,
+            "z": 5.859299936331809
           },
           {
             "active": false,
@@ -595,7 +651,7 @@
             "z": 0.0
           }
         ],
-        "focus": 0,
+        "focus": 1,
         "pointCloud": {
           "pointSize": 3.0
         },

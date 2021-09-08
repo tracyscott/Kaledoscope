@@ -115,7 +115,7 @@ public class KaledoscopeApp extends PApplet implements LXPlugin {
     flags.startMultiThreaded = true;
 
     logger.info("Creating model");
-    KaledoscopeModel model = KaledoscopeModel.createModel(3, 4, 20);
+    KaledoscopeModel model = KaledoscopeModel.createModel(3, 4, 10);
 
     new LXStudio(this, flags, model);
     this.surface.setTitle(WINDOW_TITLE);
