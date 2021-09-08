@@ -1,3 +1,15 @@
+Kaledoscope
+==
+
+In order to build with mvn package, you must install the JARs included in the lib/ directory into
+your local Maven repository like so:
+```console
+mvn install:install-file -Dfile=lx-0.2.1-jar-with-dependencies.jar -DgroupId=heronarts -DartifactId=lx -Dversion=0.2.1 -Dpackaging=jar
+mvn install:install-file -Dfile=p3lx-0.2.1.jar -DgroupId=heronarts -DartifactId=p3lx -Dversion=0.2.1 -Dpackaging=jar
+mvn install:install-file -Dfile=lxstudio-0.2.1.jar -DgroupId=heronarts -DartifactId=lxstudio -Dversion=0.2.1 -Dpackaging=jar
+```
+
+Derived from...
 LX Studio
 ==
 
