@@ -1,6 +1,6 @@
 {
   "version": "0.2.1",
-  "timestamp": 1631092255331,
+  "timestamp": 1631096674755,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -196,13 +196,13 @@
               "transitionEnabled": false,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
-              "focusedPattern": 4,
+              "focusedPattern": 6,
               "triggerPatternCycle": false
             },
             "children": {},
             "effects": [],
             "clips": [],
-            "patternIndex": 4,
+            "patternIndex": 6,
             "patterns": [
               {
                 "id": 31,
@@ -387,6 +387,66 @@
                 "children": {
                   "modulation": {
                     "id": 93,
+                    "class": "heronarts.lx.modulation.LXModulationEngine",
+                    "internal": {
+                      "modulationColor": 0
+                    },
+                    "parameters": {
+                      "label": "Modulation"
+                    },
+                    "children": {},
+                    "modulators": [],
+                    "modulations": [],
+                    "triggers": []
+                  }
+                },
+                "deviceVersion": -1
+              },
+              {
+                "id": 120,
+                "class": "art.lookingup.pattern.HueFlies",
+                "internal": {
+                  "modulationColor": 0,
+                  "expanded": true,
+                  "modulationExpanded": false,
+                  "autoCycleEligible": true
+                },
+                "parameters": {
+                  "label": "HueFlies"
+                },
+                "children": {
+                  "modulation": {
+                    "id": 121,
+                    "class": "heronarts.lx.modulation.LXModulationEngine",
+                    "internal": {
+                      "modulationColor": 0
+                    },
+                    "parameters": {
+                      "label": "Modulation"
+                    },
+                    "children": {},
+                    "modulators": [],
+                    "modulations": [],
+                    "triggers": []
+                  }
+                },
+                "deviceVersion": -1
+              },
+              {
+                "id": 150,
+                "class": "art.lookingup.pattern.StrandHue",
+                "internal": {
+                  "modulationColor": 0,
+                  "expanded": true,
+                  "modulationExpanded": false,
+                  "autoCycleEligible": true
+                },
+                "parameters": {
+                  "label": "StrandHue"
+                },
+                "children": {
+                  "modulation": {
+                    "id": 151,
                     "class": "heronarts.lx.modulation.LXModulationEngine",
                     "internal": {
                       "modulationColor": 0
@@ -588,26 +648,26 @@
         "centerPoint": false,
         "camera": {
           "active": true,
-          "radius": 8.96323434927896,
-          "theta": 0.024569230154156685,
-          "phi": -0.3691808544099331,
-          "x": 38.088763734005624,
-          "y": 460.0961913559586,
-          "z": 5.859299936331809
+          "radius": 563.7754235601897,
+          "theta": 0.5388181414455175,
+          "phi": -0.2008812241256237,
+          "x": -5.201461778022349,
+          "y": 244.77963334321976,
+          "z": 18.105866488069296
         },
         "cue": [
           {
             "active": true,
-            "radius": 988.7798049203577,
-            "theta": 0.033919211477041245,
-            "phi": -0.42528073489665985,
-            "x": 24.149999618530273,
-            "y": 474.3500061035156,
-            "z": 0.0
+            "radius": 563.7754235601897,
+            "theta": 0.5388181414455175,
+            "phi": -0.2008812241256237,
+            "x": -5.201461778022349,
+            "y": 244.77963334321976,
+            "z": 18.105866488069296
           },
           {
             "active": true,
-            "radius": 8.96323434927896,
+            "radius": 12.894243957442677,
             "theta": 0.024569230154156685,
             "phi": -0.3691808544099331,
             "x": 38.088763734005624,
@@ -651,9 +711,9 @@
             "z": 0.0
           }
         ],
-        "focus": 1,
+        "focus": 0,
         "pointCloud": {
-          "pointSize": 3.0
+          "pointSize": 3.449999989941716
         },
         "grid": {
           "visible": false,

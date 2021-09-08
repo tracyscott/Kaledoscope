@@ -50,7 +50,7 @@ public class KaledoscopeModel extends LXModel {
         }
         t = (float) bezierButterflyIndex / (float) (numButterflies * numStrandsPerRun/2);
         Point bPos = calculateBezierPoint(t, bezier.start, bezier.c1, bezier.c2, bezier.end);
-        LUButterfly butterfly = new LUButterfly(bPos.x, bPos.y, 0.0f);
+        LUButterfly butterfly = new LUButterfly(i, i + strandIndex * numButterflies, bPos.x, bPos.y, 0.0f);
         butterflies.add(butterfly);
         allButterflies.add(butterfly);
         allPoints.addAll(butterfly.allPoints);
@@ -79,6 +79,7 @@ public class KaledoscopeModel extends LXModel {
   static public class Run {
     public List<LXPoint> allPoints;
     public List<Strand> strands;
+    public List<LUButterfly> butterflies;
     Bezier bezier1;
     Bezier bezier2;
     public List<Bezier> beziers;
@@ -108,6 +109,7 @@ public class KaledoscopeModel extends LXModel {
       Point b2C2 = new Point(b2End.x - cxOffset, b2End.y - cyOffset);
       bezier2 = new Bezier(b2Start, b2C1, b2C2, b2End);
       strands = new ArrayList<Strand>();
+      butterflies = new ArrayList<LUButterfly>();
       allPoints = new ArrayList<LXPoint>();
       beziers = new ArrayList<Bezier>();
       beziers.add(bezier1);
@@ -115,6 +117,7 @@ public class KaledoscopeModel extends LXModel {
       for (int i = 0; i < numStrands; i++) {
         Strand strand = new Strand(butterfliesPerStrand, pos, i, beziers);
         allPoints.addAll(strand.allPoints);
+        butterflies.addAll(strand.butterflies);
         allStrands.add(strand);
       }
     }

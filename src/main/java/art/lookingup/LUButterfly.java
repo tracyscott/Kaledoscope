@@ -29,8 +29,8 @@ import java.util.List;
  * mapping that it not so tedious.
  */
 public class LUButterfly {
-  public static float ledSpacing = 0.1f;
-  public static float stripSpacing = 0.3f;
+  public static float ledSpacing = 0.3f;
+  public static float stripSpacing = 0.6f;
   public List<LXPoint> right;
   public List<LXPoint> left;
   public List<LXPoint> allPoints;
@@ -40,12 +40,16 @@ public class LUButterfly {
   public float x;
   public float y;
   public float z;
+  public int strandIndex;
+  public int runIndex;
 
-
-  public LUButterfly(float x, float y, float z) {
+  public LUButterfly(int strandIndex, int runIndex, float x, float y, float z) {
     this.x = x;
     this.y = y;
     this.z = z;
+    this.strandIndex = strandIndex;
+    this.runIndex = runIndex;
+
     buildPoints();
   }
 
