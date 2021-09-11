@@ -11,7 +11,7 @@ import heronarts.lx.pattern.LXPattern;
 
 @LXCategory(LXCategory.TEST)
 public class RunPtrn extends LXPattern {
-  DiscreteParameter runNum = new DiscreteParameter("run", 0, 0, 3);
+  DiscreteParameter runNum = new DiscreteParameter("run", 0, 0, 7);
   BooleanParameter tracer = new BooleanParameter("tracer", false);
 
   int currentIndex = 0;

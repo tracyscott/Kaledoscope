@@ -15,27 +15,77 @@ public class KaledoscopeModel extends LXModel {
   private static final Logger logger = Logger.getLogger(KaledoscopeModel.class.getName());
 
   public static List<LUButterfly> allButterflies;
+  public static List<LUFlower> allFlowers;
   public static List<Run> allRuns;
   public static List<Strand> allStrands;
   public static int numStrandsPerRun;
 
   /**
-   * A Strand is some number of butterflies wired in series.  Each strand should be wired to a single
+   * A Strand is some number of butterflies wired in series.  Multiple strands can be wired to a single
    * LED controller output.  Typically a strand would receive data via a Pixlite long range receiver or
    * something similar.
+   *
+   * A Strand can also be a number of flowers wired in series.
    */
   static public class Strand {
-    public List<LUButterfly> butterflies;
-    public List<LXPoint> allPoints;
-    public int strandIndex;
+    // The global strandId.  These are allocated as we build the model.
+    int strandId;
+    // The index number of this strand on a particular run
+    public int strandRunIndex;
+    public enum StrandType {
+      BUTTERFLY,
+      FLOWER
+    }
+    StrandType strandType;
+    public Run run;
 
-    public Strand(int numButterflies, float xpos, int strandIndex, List<Bezier> beziers) {
+    public List<LUButterfly> butterflies;
+    public List<LUFlower> flowers;
+    public List<LXPoint> allPoints;
+
+    float x, y, z;
+
+    public Strand(Run run, int strandId, StrandType strandType, float x, float y, float z, int strandRunIndex) {
+      this.strandId = strandId;
+      this.run = run;
+      this.strandType = strandType;
+      this.x = x;
+      this.y = y;
+      this.z = z;
+      flowers = new ArrayList<LUFlower>();
       butterflies = new ArrayList<LUButterfly>();
       allPoints = new ArrayList<LXPoint>();
-      this.strandIndex = strandIndex;
-      Bezier bezier = beziers.get(strandIndex / 2);
+
+      int configuredNumFlowers = KaledoscopeApp.allStrandLengths.get(strandId);
+      float flowerSpacing = 12f;
+      for (int i = 0; i < configuredNumFlowers; i++) {
+        int prevStrandsFlowers = run.flowers.size();
+        // Flowers are wired from top to bottom since the wiring will be high up in the tree.
+        LUFlower flower = new LUFlower(i, i + prevStrandsFlowers, x, y - i * flowerSpacing, z);
+        flowers.add(flower);
+        allFlowers.add(flower);
+        allPoints.addAll(flower.allPoints);
+      }
+    }
+
+    public Strand(Run run, int strandId, int numButterflies, float xpos, int strandRunIndex, List<Bezier> beziers) {
+      this.strandId = strandId;
+      strandType = StrandType.BUTTERFLY;
+      butterflies = new ArrayList<LUButterfly>();
+      flowers = new ArrayList<LUFlower>();
+      allPoints = new ArrayList<LXPoint>();
+      this.strandRunIndex = strandRunIndex;
+      // The number of configured butterflies on this strand.
+      // TODO(tracy): currently the butterfly positions are generated along a curve with an expected 20
+      // butterflies per strand.  We need to re-parameterize T so that we can move a fixed distance along
+      // the arc-length of the curve.  That way if we have only 10 butterflies then we would move 10 feet
+      // along the curve since each butterfly is 1 foot apart.  Also, all current curves start and end at the
+      // same Y position whereas in reality the start and end point for each cable could be arbitrary.
+      int configuredNumButterflies = KaledoscopeApp.allStrandLengths.get(strandId);
+
+      Bezier bezier = beziers.get(strandRunIndex);
       //float yOffset = strandIndex * numButterflies * butterflySpacingInches;
-      for (int i = 0; i < numButterflies; i++) {
+      for (int i = 0; i < configuredNumButterflies; i++) {
         // This provides the 't' parameter for our bezier curve.  We currently have 2 strands spanning
         // a single bezier curve.  There might not be a fixed mapping between bezier curves and strands.
         // It will more likely be anchor points at certain distances along the wire that generate the curves
@@ -43,14 +93,26 @@ public class KaledoscopeModel extends LXModel {
         // butterflies since we know they are 12 inches apart.
         float t;
         int bezierButterflyIndex;
-        if (strandIndex < 2) {
-          bezierButterflyIndex = i + strandIndex * numButterflies;
-        } else {
-          bezierButterflyIndex = i + (strandIndex - 2) * numButterflies;
-        }
+        // NOTE(tracy): We are switching back to one strand per one bezier curve for a bit until we get
+        // the configurable runs and strand lengths stuff worked out.  It is more likely that we will have
+        // just 2 strands of 20 butterflies each on each separate run.  20 butterflies is 320 leds which is about the
+        // max we should target for each pixlite output to keep the FPS reasonable.  So each steel wire will carry
+        // two pixlite outputs.
+        //if (strandIndex < 2) {
+          bezierButterflyIndex = i; // + strandRunIndex * numButterflies;
+        //} else {
+        //  bezierButterflyIndex = i + (strandIndex - 2) * numButterflies;
+        //}
         t = (float) bezierButterflyIndex / (float) (numButterflies * numStrandsPerRun/2);
         Point bPos = calculateBezierPoint(t, bezier.start, bezier.c1, bezier.c2, bezier.end);
-        LUButterfly butterfly = new LUButterfly(i, i + strandIndex * numButterflies, bPos.x, bPos.y, 0.0f);
+
+        // The butterfly's index on the entire run length is the sum of all strands before this
+        // strand plus the butterfly's position on this strand.
+        // Check my parent 'Run', get the list of previous strands.  Count their butterflies.
+        // Our parent Run's list of butterflies won't be updated with this strand's butterflies until the
+        // constructor is finished so it currently accounts for all butterflies on previous strands.
+        int prevStrandsButterflies = run.butterflies.size();
+        LUButterfly butterfly = new LUButterfly(i, i + prevStrandsButterflies, bPos.x, 120f, bPos.y);
         butterflies.add(butterfly);
         allButterflies.add(butterfly);
         allPoints.addAll(butterfly.allPoints);
@@ -80,6 +142,7 @@ public class KaledoscopeModel extends LXModel {
     public List<LXPoint> allPoints;
     public List<Strand> strands;
     public List<LUButterfly> butterflies;
+    public List<LUFlower> flowers;
     Bezier bezier1;
     Bezier bezier2;
     public List<Bezier> beziers;
@@ -87,8 +150,31 @@ public class KaledoscopeModel extends LXModel {
     float cxOffset = 100f;
     float cyOffset = 30f;
 
+    public enum RunType {
+      BUTTERFLY,
+      FLOWER
+    }
+    RunType runType;
+
+    public Run(int runIndex, RunType runType, int numStrands, float x, float y, float z) {
+      this.runIndex = runIndex;
+      this.runType = runType;
+      strands = new ArrayList<Strand>();
+      butterflies = new ArrayList<LUButterfly>();
+      flowers = new ArrayList<LUFlower>();
+      allPoints = new ArrayList<LXPoint>();
+
+      for (int i = 0; i < numStrands; i++) {
+        Strand strand = new Strand(this, allStrands.size(), Strand.StrandType.FLOWER, x, y, z, i);
+        allPoints.addAll(strand.allPoints);
+        flowers.addAll(strand.flowers);
+        allStrands.add(strand);
+      }
+    }
+
     public Run(int runIndex, float pos, int numStrands, int butterfliesPerStrand) {
       this.runIndex = runIndex;
+      this.runType = RunType.BUTTERFLY;
       if (runIndex == 0)
         cxOffset = - cxOffset;
       if (runIndex == 2) {
@@ -110,12 +196,13 @@ public class KaledoscopeModel extends LXModel {
       bezier2 = new Bezier(b2Start, b2C1, b2C2, b2End);
       strands = new ArrayList<Strand>();
       butterflies = new ArrayList<LUButterfly>();
+      flowers = new ArrayList<LUFlower>();
       allPoints = new ArrayList<LXPoint>();
       beziers = new ArrayList<Bezier>();
       beziers.add(bezier1);
       beziers.add(bezier2);
       for (int i = 0; i < numStrands; i++) {
-        Strand strand = new Strand(butterfliesPerStrand, pos, i, beziers);
+        Strand strand = new Strand(this, allStrands.size(), butterfliesPerStrand, pos, i, beziers);
         allPoints.addAll(strand.allPoints);
         butterflies.addAll(strand.butterflies);
         allStrands.add(strand);
@@ -129,10 +216,23 @@ public class KaledoscopeModel extends LXModel {
     allRuns = new ArrayList<Run>(numRuns);
     allStrands = new ArrayList<Strand>();
     allButterflies = new ArrayList<LUButterfly>();
+    allFlowers = new ArrayList<LUFlower>();
     numStrandsPerRun = strandsPerRun;
 
     for (int i = 0; i < numRuns; i++) {
       Run run = new Run(i, i * lineSpacingInches, numStrandsPerRun, butterfliesPerStrand);
+      allRuns.add(run);
+      allPoints.addAll(run.allPoints);
+    }
+
+    int flowerRuns = KaledoscopeApp.runsFlowers;
+    for (int i = 0; i < flowerRuns; i++) {
+      // For now, flowers start at 8ft high.
+      float x = -5f * 12f;
+      float runSpacing = 10f * 12f;
+      if (i % 2 == 1)
+        x += 10 * 12f;
+      Run run = new Run(allRuns.size(), Run.RunType.FLOWER, 1, x, 8f * 12f, i * runSpacing + 12f);
       allRuns.add(run);
       allPoints.addAll(run.allPoints);
     }

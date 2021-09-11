@@ -11,7 +11,7 @@ import heronarts.lx.pattern.LXPattern;
 
 @LXCategory(LXCategory.TEST)
 public class Strand extends LXPattern {
-  DiscreteParameter strandNum = new DiscreteParameter("strand", 0, 0, 12);
+  DiscreteParameter strandNum = new DiscreteParameter("strand", 0, 0, 6);
   public Strand(LX lx) {
     super(lx);
     addParameter("strand", strandNum);

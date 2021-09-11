@@ -1,6 +1,6 @@
 {
   "version": "0.2.1",
-  "timestamp": 1631096674755,
+  "timestamp": 1631346383216,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -196,13 +196,13 @@
               "transitionEnabled": false,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
-              "focusedPattern": 6,
+              "focusedPattern": 1,
               "triggerPatternCycle": false
             },
             "children": {},
             "effects": [],
             "clips": [],
-            "patternIndex": 6,
+            "patternIndex": 1,
             "patterns": [
               {
                 "id": 31,
@@ -263,7 +263,7 @@
                 },
                 "parameters": {
                   "label": "RunPtrn",
-                  "run": 2,
+                  "run": 6,
                   "tracer": false
                 },
                 "children": {
@@ -648,22 +648,22 @@
         "centerPoint": false,
         "camera": {
           "active": true,
-          "radius": 563.7754235601897,
-          "theta": 0.5388181414455175,
-          "phi": -0.2008812241256237,
-          "x": -5.201461778022349,
-          "y": 244.77963334321976,
-          "z": 18.105866488069296
+          "radius": 384.7257719726081,
+          "theta": 6.96225400455296,
+          "phi": 0.07293007150292397,
+          "x": 49.050010681152344,
+          "y": 238.25624084472656,
+          "z": -36.75
         },
         "cue": [
           {
             "active": true,
-            "radius": 563.7754235601897,
-            "theta": 0.5388181414455175,
-            "phi": -0.2008812241256237,
-            "x": -5.201461778022349,
-            "y": 244.77963334321976,
-            "z": 18.105866488069296
+            "radius": 384.7257719726081,
+            "theta": 6.96225400455296,
+            "phi": 0.07293007150292397,
+            "x": 49.050010681152344,
+            "y": 238.25624084472656,
+            "z": -36.75
           },
           {
             "active": true,
@@ -716,8 +716,8 @@
           "pointSize": 3.449999989941716
         },
         "grid": {
-          "visible": false,
-          "spacing": 100.0,
+          "visible": true,
+          "spacing": 60.0,
           "planes": 1,
           "size": 10,
           "x": 0.0,

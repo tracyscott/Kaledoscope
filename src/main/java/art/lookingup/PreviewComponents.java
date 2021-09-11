@@ -17,20 +17,21 @@ public class PreviewComponents {
     private UICylinder zAxis;
     private Floor floor;
     public boolean showAxes;
+    public boolean showCtrlPoints;
     public boolean showFloor;
 
     public Axes() {
-      xAxis = new UICylinder(10f, 100.0f, 4, LXColor.rgb(255,0,0));
-      yAxis = new UICylinder(10f, 100.0f, 4, LXColor.rgb(0, 255, 0));
-      zAxis = new UICylinder(10f, 100.0f, 4, LXColor.rgb(0, 0, 255));
+      xAxis = new UICylinder(5f, 100.0f, 4, LXColor.rgb(255,0,0));
+      yAxis = new UICylinder(5f, 100.0f, 4, LXColor.rgb(0, 255, 0));
+      zAxis = new UICylinder(5f, 100.0f, 4, LXColor.rgb(0, 0, 255));
       floor = new Floor();
       showAxes = true;
-      showFloor = false;
+      showCtrlPoints = false;
     }
 
     public void onDraw(UI ui, PGraphics pg) {
       if (showAxes) {
-        /*
+
         yAxis.onDraw(ui, pg);
         pg.pushMatrix();
         pg.rotateZ(-PConstants.HALF_PI);
@@ -40,37 +41,40 @@ public class PreviewComponents {
         pg.rotateX(PConstants.HALF_PI);
         zAxis.onDraw(ui, pg);
         pg.popMatrix();
-        */
 
-        // show cubes at each bezier control point
-        int runNum = 0;
-        for (KaledoscopeModel.Run run : KaledoscopeModel.allRuns) {
+        if (showCtrlPoints) {
+          // show cubes at each bezier control point
+          int runNum = 0;
+          for (KaledoscopeModel.Run run : KaledoscopeModel.allRuns) {
             int bezierNum = 1;
-            for (KaledoscopeModel.Bezier bezier : run.beziers) {
-              pg.stroke(0);
-              pg.pushMatrix();
-              pg.translate(bezier.start.x, bezier.start.y);
-              int bright = 255 / bezierNum;
-              pg.fill(LXColor.rgb(0, 0, bright));
-              pg.box(10);
-              pg.popMatrix();
-              pg.pushMatrix();
-              pg.translate(bezier.end.x, bezier.end.y);
-              pg.fill(LXColor.rgb(0, bright, bright));
-              pg.box(10);
-              pg.popMatrix();
-              pg.pushMatrix();
-              pg.translate(bezier.c1.x, bezier.c1.y);
-              pg.fill(LXColor.rgb(bright, 0, 0));
-              pg.box(10);
-              pg.popMatrix();
-              pg.pushMatrix();
-              pg.translate(bezier.c2.x, bezier.c2.y);
-              pg.fill(LXColor.rgb(0, bright, 0));
-              pg.box(10);
-              pg.popMatrix();
-              bezierNum++;
+            if (run.beziers != null) {
+              for (KaledoscopeModel.Bezier bezier : run.beziers) {
+                pg.stroke(0);
+                pg.pushMatrix();
+                pg.translate(bezier.start.x, bezier.start.y);
+                int bright = 255 / bezierNum;
+                pg.fill(LXColor.rgb(0, 0, bright));
+                pg.box(10);
+                pg.popMatrix();
+                pg.pushMatrix();
+                pg.translate(bezier.end.x, bezier.end.y);
+                pg.fill(LXColor.rgb(0, bright, bright));
+                pg.box(10);
+                pg.popMatrix();
+                pg.pushMatrix();
+                pg.translate(bezier.c1.x, bezier.c1.y);
+                pg.fill(LXColor.rgb(bright, 0, 0));
+                pg.box(10);
+                pg.popMatrix();
+                pg.pushMatrix();
+                pg.translate(bezier.c2.x, bezier.c2.y);
+                pg.fill(LXColor.rgb(0, bright, 0));
+                pg.box(10);
+                pg.popMatrix();
+                bezierNum++;
+              }
             }
+          }
         }
       }
       if (showFloor)

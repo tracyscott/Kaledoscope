@@ -26,8 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.*;
 
-import art.lookingup.effect.AppEffect;
-import art.lookingup.pattern.AppPattern;
+import art.lookingup.ui.*;
 import heronarts.lx.LX;
 import heronarts.lx.LXPlugin;
 import heronarts.lx.effect.LXEffect;
@@ -52,6 +51,21 @@ public class KaledoscopeApp extends PApplet implements LXPlugin {
   private static boolean FULLSCREEN = false;
 
   private static final String LOG_FILENAME_PREFIX = "kaledoscope";
+
+  public static UIPixliteConfig pixliteConfig;
+  public static MappingConfig mappingConfig;
+  public static StrandLengths strandLengths;
+  public static RunsConfig runsConfig;
+  UIPreviewComponents previewComponents;
+  public static PreviewComponents.Axes axes;
+
+  // This are values stored in parameter files that we need to load before we build the UI.  These are
+  // pre-requisites for the model construction.
+  public static ParameterFile runsConfigParams;
+  public static ParameterFile strandLengthsParams;
+  static public int runsButterflies;
+  static public int runsFlowers;
+  static public List<Integer> allStrandLengths;
 
   static {
     System.setProperty(
@@ -114,11 +128,29 @@ public class KaledoscopeApp extends PApplet implements LXPlugin {
     flags.useGLPointCloud = false;
     flags.startMultiThreaded = true;
 
+    loadModelParams();
+
     logger.info("Creating model");
-    KaledoscopeModel model = KaledoscopeModel.createModel(3, 4, 10);
+    KaledoscopeModel model = KaledoscopeModel.createModel(runsButterflies, 2, 20);
 
     new LXStudio(this, flags, model);
     this.surface.setTitle(WINDOW_TITLE);
+  }
+
+  /**
+   * These are parameters we need for building the model. We bind the UI to these ParameterFile's
+   * in onUIReady.
+   * We need to know the number of butterfly runs, the number of flower runs, and for each strand, the length
+   * of that strand in LEDs, which will tell us the number of fixtures.
+   * TODO(tracy): It would be better to have a strand type and then just list the number of fixtures on that
+   * strand from which we can compute the number of LEDs.
+   */
+  public void loadModelParams() {
+    runsConfigParams = ParameterFile.instantiateAndLoad(RunsConfig.filename);
+    strandLengthsParams = ParameterFile.instantiateAndLoad(StrandLengths.filename);
+    runsButterflies = Integer.parseInt(runsConfigParams.getStringParameter(RunsConfig.BUTTERFLY_RUNS,"3").getString());
+    runsFlowers = Integer.parseInt(runsConfigParams.getStringParameter(RunsConfig.FLOWER_RUNS, "4").getString());
+    allStrandLengths = StrandLengths.getAllStrandLengths(strandLengthsParams);
   }
 
   /**
@@ -169,13 +201,6 @@ public class KaledoscopeApp extends PApplet implements LXPlugin {
     // you cannot assume you are working with an LXStudio class or that any UI will be
     // available.
     registerAll(lx);
-    /*
-    // Register custom pattern and effect types
-    lx.registry.addPattern(AppPattern.class);
-    lx.registry.addEffect(AppEffect.class);
-    lx.registry.addPattern(art.lookingup.pattern.Strand.class);
-    lx.registry.addPattern(art.lookingup.pattern.RunPtrn.class);
-    */
   }
 
   public void initializeUI(LXStudio lx, LXStudio.UI ui) {
@@ -187,8 +212,15 @@ public class KaledoscopeApp extends PApplet implements LXPlugin {
   public void onUIReady(LXStudio lx, LXStudio.UI ui) {
     // At this point, the LX Studio application UI has been built. You may now add
     // additional views and components to the Ui heirarchy.
-    PreviewComponents.Axes axes = new PreviewComponents.Axes();
+    axes = new PreviewComponents.Axes();
     ui.preview.addComponent(axes);
+    previewComponents = (UIPreviewComponents) new UIPreviewComponents(lx.ui).setExpanded(false).addToContainer(lx.ui.leftPane.global);
+
+    pixliteConfig = (UIPixliteConfig) new UIPixliteConfig(lx.ui, lx).setExpanded(false).addToContainer(lx.ui.leftPane.global);
+    mappingConfig = (MappingConfig) new MappingConfig(lx.ui, lx).setExpanded(false).addToContainer(lx.ui.leftPane.global);
+    runsConfig = (RunsConfig) new RunsConfig(lx.ui, lx, runsConfigParams).setExpanded(false).addToContainer(lx.ui.leftPane.global);
+    strandLengths = (StrandLengths) new StrandLengths(lx.ui, lx, strandLengthsParams).setExpanded(false).addToContainer(lx.ui.leftPane.global);
+
   }
 
   @Override
